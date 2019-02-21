@@ -8,23 +8,23 @@ class Controller(object):
         
         self._low = low
         self._high = high
-        self._heating_active = False
-        self._air_con_active = False
+        self._heatingActive = False
         self._heater = heater
 
     def control(self):
     
-        cur_temp = WeatherAPI().getTemperature()
+        curTemp = WeatherAPI().getTemperature()
 
-        if (cur_temp <= self._low and not self._heating_active):
-            self.activate_heating()
+        if (curTemp <= self._low and not self._heatingActive):
+            print(curTemp)
+            self.activateHeating()
         
     
-    def activate_heating(self):
+    def activateHeating(self):
         
         self._heater.powerOn()
     
-    def deactivate_heating(self):
+    def deactivateHeating(self):
         
         self._heater.powerOff()
 
