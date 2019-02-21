@@ -19,8 +19,6 @@ class Controller(object):
         if (cur_temp <= self._low and not self._heating_active):
             self.activate_heating()
         
-        if (cur_temp >= self._high and not self._air_con_active):
-            self.activate_aircon()
     
     def activate_heating(self):
         
@@ -29,16 +27,6 @@ class Controller(object):
     def deactivate_heating(self):
         
         self._heater.powerOff()
-    
-    def activate_aircon(self):
-
-        self._air_con_active = True
-        print("Air Conditioning On...")
-
-    def deactivate_aircon(self):
-
-        self._air_con_active = False
-        print("Air Conditioning Off...")
 
 def test():
 
