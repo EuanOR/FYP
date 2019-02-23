@@ -31,13 +31,11 @@ class Heater(object):
     def powerOn(self):
         
         for r in self._rads:
-
             r.activate()
 
     def powerOff(self):
         
         for r in self._rads:
-
             r.deactivate()
 
 def test():
