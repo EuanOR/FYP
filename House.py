@@ -1,6 +1,8 @@
+from Room import Room
+from Window import Window
 class House(object):
 
-    def __init__(self,insulation, rooms, floors, lat, lon):
+    def __init__(self,insulation, rooms, lat, lon):
         
         if isinstance(insulation,bool):
             self._insulation = insulation
@@ -12,9 +14,11 @@ class House(object):
         else:
             self._rooms = []
         
-        self._floors = floors
         self._lat = lat
         self._lon = lon
+
+        self._averageTemp = 0
+        self.calculateAverageTemp()
 
     def insulate(self):
         
@@ -38,13 +42,21 @@ class House(object):
     def setRooms(self, new_rooms):
         
         if(isinstance(new_rooms,list)):
+            for r in new_rooms:
+                if(not isinstance(r,Room)):
+                    print("Get Here")
+                    return "Must be an instance of the Room Class"
             self._rooms = new_rooms
+        
         else:
             print("Invalid Operation: Must be of type list")
     
     def addRoom(self, new_room):
         
-        self._rooms.append(new_room)
+        if (isinstance(new_room, Room)):
+            self._rooms.append(new_room)
+        else:
+            print("Must be an instance of the Room Class")
     
     def getLat(self):
         
@@ -61,10 +73,36 @@ class House(object):
     def setLon(self, new_lon):
 
         self._lon = new_lon
+    
+    def getAverageTemp(self):
+        
+        return self._averageTemp
+    
+    def calculateAverageTemp(self):
+        
+        combinedTemp = 0
+        for r in self._rooms:
+            combinedTemp += r.getTemp()
+        
+        self._averageTemp = round(combinedTemp/(len(self._rooms)),2)
 
 def test():
 
-    h = House(True, ["room1, room2, room3"],2,-25.004, 30.032)
+    w1 = Window(2)
+    w2 = Window(2)
+    w3 = Window(2)
+    w4 = Window(2)
+    w5 = Window(2)
+    w6 = Window(2)
+
+    r1 = Room("Kitchen",12,10,8,10.7,True,w1)
+    r2 = Room("Kitchen",12,10,8,11.1,True,w2)
+    r3 = Room("Kitchen",12,10,8,10.3,True,w3)
+    r4 = Room("Kitchen",12,10,8,10.9,True,w4)
+    r5 = Room("Kitchen",12,10,8,11.3,True,w5)
+    r6 = Room("Kitchen",12,10,8,11.7,True,w6)
+
+    h = House(True, [r1, r2, r3],-25.004, 30.032)
     h.insulate()
     h.isInsulated()
     print(h.getRooms())
@@ -74,6 +112,7 @@ def test():
     print(h.getLat())
     h.setLon(12.651)
     print(h.getLon())
+    print(h.getAverageTemp())
 
 if __name__ == "__main__":
     test()
