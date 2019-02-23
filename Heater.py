@@ -2,31 +2,31 @@ from Rad import Rad
 
 class Heater(object):
 
-    def __init__(self, heat, power_con):
+    def __init__(self, heat, powerCon):
         
         self._rads = []
         self._heat = heat
-        self._power_con = power_con
+        self._powerCon = powerCon
 
-    def addRad(self, new_rad):
+    def addRad(self, newRad):
         
-        self._rads.append(new_rad)
+        self._rads.append(newRad)
 
-    def setHeat(self, new_heat):
+    def setHeat(self, newHeat):
         
-        self._heat = new_heat
+        self._heat = newHeat
 
     def getHeat(self):
         
         return self._heat
 
-    def setPowerCon(self, new_power_con):
+    def setPowerCon(self, newPowerCon):
         
-        self._power_con = new_power_con
+        self._powerCon = newPowerCon
 
     def getPowerCon(self):
         
-        return self._power_con
+        return self._powerCon
 
     def powerOn(self):
         
