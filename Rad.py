@@ -23,3 +23,7 @@ class Rad(object):
         
         self._active = False
         print("Powered Off")
+
+    def isActive(self):
+
+        return self._active
