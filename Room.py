@@ -1,6 +1,9 @@
+from Window import Window
+from Rad import Rad
+
 class Room(object):
 
-    def __init__(self, name, length, width, height, insulation, window):
+    def __init__(self, name, length, width, height, temp, rad, window):
         #Measurements are done in Feet.
         self._name = name
         self._length = length
@@ -10,10 +13,13 @@ class Room(object):
         self._sqrFt = self._calculateSqrFt(self._length, self._width)
         self._area = self._calculateArea(self._length, self._width, self._height)
 
-        if isinstance(insulation, bool):
-            self._insulation = insulation
+        self._temp = temp
+
+        if isinstance(rad, Rad):
+            self._rad = rad
+        
         else:
-            self._insulation = False
+            print("Rad must be of type Rad")
         
         self._window = window
 
@@ -75,6 +81,18 @@ class Room(object):
         
        self._area = self._calculateArea(self._length,self._width,self._height)
 
+    def getTemp(self):
+        
+        return self._temp
+    
+    def setTemp(self,newTemp):
+
+        self._temp = newTemp
+    
+    def changeTemp(self, change):
+
+        self._temp += change
+
     def openDoor(self):
         
         self._doorOpen = True
@@ -82,10 +100,21 @@ class Room(object):
     def closeDoor(self):
 
         self._doorOpen = False
+
+    def openWindow(self):
+
+        self._window.openWindow()
+    
+    def closeWindow(self):
+
+        self._window.closeWindow()
     
 
 def test():
-    r = Room("Living room",12,15,10,True,"glazed")
+
+    w = Window(2)
+    r - Rad(3000)
+    r = Room("Living room",12,15,10,10.5,r, w)
     print(r.getLength())
     print(r.getWidth())
     print(r.getHeight())
@@ -101,6 +130,9 @@ def test():
     print(r.getHeight())
     print(r.getSqrFt())
     print(r.getArea())
+
+    r.changeTemp(-1)
+    print(r.getTemp())
     
 
 if __name__ == "__main__":
