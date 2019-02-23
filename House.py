@@ -106,7 +106,7 @@ def test():
     h.insulate()
     h.isInsulated()
     print(h.getRooms())
-    h.setRooms(["Bedroom, Kitchen, Garage"])
+    h.setRooms([r4, r5, r6])
     h.addRoom("Living room")
     print(h.getRooms())
     print(h.getLat())
