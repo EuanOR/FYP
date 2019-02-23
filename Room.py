@@ -113,7 +113,7 @@ class Room(object):
 def test():
 
     w = Window(2)
-    r - Rad(3000)
+    r = Rad(3000)
     r = Room("Living room",12,15,10,10.5,r, w)
     print(r.getLength())
     print(r.getWidth())
