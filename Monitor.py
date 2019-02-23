@@ -8,24 +8,28 @@ class Monitor(object):
         
         self._low = low
         self._high = high
-        self._heatingActive = False
         self._heater = heater
 
-    def control(self):
+        self.heatingActive = False
+
+    def monitor(self):
     
         curTemp = WeatherAPI().getTemperature()
 
-        if (curTemp <= self._low and not self._heatingActive):
+        if (curTemp <= self._low and not self.heatingActive):
+            
             print(curTemp)
             self.activateHeating()
         
     
     def activateHeating(self):
         
+        self.heatingActive = True
         self._heater.powerOn()
     
     def deactivateHeating(self):
         
+        self.heatingActive = False
         self._heater.powerOff()
 
 def test():
@@ -47,7 +51,7 @@ def test():
     H.addRad(r6)
 
     c = Monitor(10,20,H)
-    c.control()
+    c.monitor()
 
 if __name__ == "__main__":
     test()
