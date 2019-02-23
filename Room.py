@@ -16,7 +16,7 @@ class Room(object):
         self._temp = temp
 
         if isinstance(rad, Rad):
-            self._rad = rad
+            self.rad = rad
         
         else:
             print("Rad must be of type Rad")
@@ -92,7 +92,7 @@ class Room(object):
     def changeTemp(self, change):
 
         self._temp += change
-
+    
     def openDoor(self):
         
         self._doorOpen = True
