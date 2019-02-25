@@ -1,9 +1,11 @@
 from Window import Window
+from Door import Door
 from Rad import Rad
+#TODO Add wall thickness and door class
 
 class Room(object):
 
-    def __init__(self, name, length, width, height, temp, rad, window):
+    def __init__(self, name, length, width, height, temp, rad, door, window):
         #Measurements are done in Feet.
         self._name = name
         self._length = length
@@ -21,9 +23,8 @@ class Room(object):
         else:
             print("Rad must be of type Rad")
         
+        self._door = door
         self._window = window
-
-        self._doorOpen = False
     
     def __str__(self):
 
@@ -88,7 +89,7 @@ class Room(object):
 
         return self._area
     
-    def _calculateArea(self,l,w,h):
+    def _calculateArea(self, l, w, h):
         
         area = (l*w*h)
         return area
@@ -120,11 +121,11 @@ class Room(object):
 
     def openDoor(self):
         
-        self._doorOpen = True
+        self._door.openDoor()
     
     def closeDoor(self):
 
-        self._doorOpen = False
+        self._door.closeDoor()
 
     def openWindow(self):
 
@@ -138,8 +139,9 @@ class Room(object):
 def test():
 
     w = Window(2)
+    d = Door(2.0)
     r = Rad(3000)
-    r = Room("Living room",12,15,10,10.5,r, w)
+    r = Room("Living room",12,15,10,10.5,r,d,w)
     print(r.getLength())
     print(r.getWidth())
     print(r.getHeight())
