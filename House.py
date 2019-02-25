@@ -1,8 +1,10 @@
 from Room import Room
 from Window import Window
+from Door import Door
+from Heater import Heater
 class House(object):
 
-    def __init__(self,insulation, rooms, lat, lon):
+    def __init__(self,insulation, rooms, heater, lat, lon):
         
         if isinstance(insulation,bool):
             self._insulation = insulation
@@ -13,6 +15,8 @@ class House(object):
             self._rooms = rooms
         else:
             self._rooms = []
+        
+        self._heater = heater
         
         self._lat = lat
         self._lon = lon
@@ -104,14 +108,23 @@ def test():
     w5 = Window(2)
     w6 = Window(2)
 
-    r1 = Room("Kitchen",12,10,8,10.7,True,w1)
-    r2 = Room("Kitchen",12,10,8,11.1,True,w2)
-    r3 = Room("Kitchen",12,10,8,10.3,True,w3)
-    r4 = Room("Kitchen",12,10,8,10.9,True,w4)
-    r5 = Room("Kitchen",12,10,8,11.3,True,w5)
-    r6 = Room("Kitchen",12,10,8,11.7,True,w6)
+    d1 = Door(1.5)
+    d2 = Door(1.5)
+    d3 = Door(1.5)
+    d4 = Door(1.5)
+    d5 = Door(1.5)
+    d6 = Door(1.5)
 
-    h = House(True, [r1, r2, r3],-25.004, 30.032)
+    r1 = Room("Kitchen",12,10,8,10.7,True,d1,w1)
+    r2 = Room("Kitchen",12,10,8,11.1,True,d2,w2)
+    r3 = Room("Kitchen",12,10,8,10.3,True,d3,w3)
+    r4 = Room("Kitchen",12,10,8,10.9,True,d4,w4)
+    r5 = Room("Kitchen",12,10,8,11.3,True,d5,w5)
+    r6 = Room("Kitchen",12,10,8,11.7,True,d6,w6)
+
+    b = Heater([r1,r2,r3])
+
+    h = House(True, [r1, r2, r3],b,-25.004, 30.032)
     h.insulate()
     h.isInsulated()
     print(h.getRooms())
