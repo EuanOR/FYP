@@ -16,7 +16,7 @@ class Room(object):
         self._temp = temp
 
         if isinstance(rad, Rad):
-            self.rad = rad
+            self._rad = rad
         
         else:
             print("Rad must be of type Rad")
@@ -24,6 +24,22 @@ class Room(object):
         self._window = window
 
         self._doorOpen = False
+    
+    def __str__(self):
+
+        outstr = "|"
+        outstr += self._name
+        outstr += "| "
+        outstr += ("Temperature:" + str(self._temp))
+        outstr += " "
+        outstr += "Rad:"
+        
+        if self._rad.isActive():
+            outstr += "On"
+        else:
+            outstr += "Off" 
+        
+        return outstr
     
     def getLength(self):
 
@@ -93,6 +109,15 @@ class Room(object):
 
         self._temp += change
     
+    def getRad(self):
+
+        return self._rad
+    
+    def setRad(self, newRad):
+
+        if isinstance(newRad, Rad):
+            self._rad = newRad
+
     def openDoor(self):
         
         self._doorOpen = True
@@ -133,6 +158,8 @@ def test():
 
     r.changeTemp(-1)
     print(r.getTemp())
+
+    print(r)
     
 
 if __name__ == "__main__":
