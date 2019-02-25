@@ -5,7 +5,7 @@ class Rad(object):
         #BTU is the amount of heat required to raise the temperature of 1lb of water by a degree.
         self._BTU = BTU
         self._active = False
-
+    
     def setBTU(self, new_BTU):
         
         self._BTU = new_BTU
@@ -17,12 +17,10 @@ class Rad(object):
     def activate(self):
         
         self._active = True
-        print("Powered On")
 
     def deactivate(self):
         
         self._active = False
-        print("Powered Off")
 
     def isActive(self):
 
