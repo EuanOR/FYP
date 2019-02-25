@@ -2,11 +2,28 @@ from Rad import Rad
 
 class Heater(object):
 
-    def __init__(self, heat, powerCon):
+    def __init__(self, house):
         
         self._rads = []
-        self._heat = heat
-        self._powerCon = powerCon
+        for r in house.getRooms():
+            self._rads.append(r.getRad())
+        self._active = False
+
+    
+    def __str__(self):
+
+        outstr = "Heater:"
+
+        if self._active:
+            outstr += "On"
+        
+        else:
+            outstr += "Off"
+
+        outstr += " "
+        outstr += ("Rads:" + str(len(self._rads)))
+
+        return outstr
 
     def addRad(self, newRad):
         
@@ -30,17 +47,19 @@ class Heater(object):
 
     def powerOn(self):
         
+        self._active = True
         for r in self._rads:
             r.activate()
 
     def powerOff(self):
         
+        self._active = False
         for r in self._rads:
             r.deactivate()
 
 def test():
     
-    H = Heater(15, 90)
+    H = Heater(15)
 
     r1 = Rad(H.getHeat())
     r2 = Rad(H.getHeat())
@@ -55,6 +74,8 @@ def test():
     H.addRad(r4)
     H.addRad(r5)
     H.addRad(r6)
+
+    print(H)
 
     H.powerOn()
     print("\n")
