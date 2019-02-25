@@ -18,7 +18,6 @@ class Monitor(object):
 
         if (curTemp <= self._low and not self.heatingActive):
             
-            print(curTemp)
             self.activateHeating()
         
     
@@ -34,7 +33,7 @@ class Monitor(object):
 
 def test():
 
-    H = Heater(15, 90)
+    H = Heater(20)
 
     r1 = Rad(H.getHeat())
     r2 = Rad(H.getHeat())
