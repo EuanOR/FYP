@@ -1,11 +1,11 @@
 from Rad import Rad
-
+from Room import Room
 class Heater(object):
 
-    def __init__(self, house):
+    def __init__(self, rooms):
         
         self._rads = []
-        for r in house.getRooms():
+        for r in rooms:
             self._rads.append(r.getRad())
         self._active = False
 
