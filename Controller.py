@@ -2,7 +2,9 @@ from House import House
 from Room import Room
 from Rad import Rad
 from WeatherAPI import WeatherAPI
+
 import time
+import threading
 
 class Controller(object):
 
@@ -52,24 +54,27 @@ class Controller(object):
         for r in self._house.getRooms():
             print(r)
         print(self._monitor._heater)
+    
+    def monitor(self):
+        while True:
+            self._monitor.monitor()
+            time.sleep(10)
+    
+    def changeTemp(self):
+        while True:
+            for r in self._house.getRooms():
+                increase = self.calcIncrease(r)
+                decrease = self.calcDecrease(r)
+                change = increase - decrease
+                r.changeTemp(change)
+            self._house.calculateAverageTemp()
+            self.display()
+            time.sleep(30) 
 
     def run(self):
         
-        pollTime = time.perf_counter()
-        changeTime = time.perf_counter()
-        self.display()
-        while True:
-            
-            if (time.perf_counter() - pollTime) > 10.0:
-                self._monitor.monitor()
-                pollTime = time.perf_counter()
-            
-            if (time.perf_counter() - changeTime) > 30.0:
-                for r in self._house.getRooms():
-                    increase = self.calcIncrease(r)
-                    decrease = self.calcDecrease(r)
-                    change = increase - decrease
-                    r.changeTemp(change)
-                self._house.calculateAverageTemp()
-                self.display()    
-                changeTime = time.perf_counter()
+        monitor = threading.Thread(target = self.monitor)
+        change = threading.Thread(target = self.changeTemp)
+
+        monitor.start()
+        change.start()
