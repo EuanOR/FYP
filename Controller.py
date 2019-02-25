@@ -32,21 +32,32 @@ class Controller(object):
     def calcIncrease(self, room):
         
         increase = 0.0
-        if room.getRad().isActive():
-            increase = room.rad.getBTU() / room.getArea()
+        rad = room.getRad()
+        
+        if rad.isActive():
+            increase = rad.getBTU() / room.getArea()
         
         return increase
     
     def calcDecrease(self, room):
         
         decrease = 0.0 
+        if self._house.isInsulated():
+            decrease += -0.1
         return decrease
+    
+    def display(self):
 
-    def mainLoop(self):
+        print(self._house)
+        for r in self._house.getRooms():
+            print(r)
+        print(self._monitor._heater)
+
+    def run(self):
         
         pollTime = time.perf_counter()
         changeTime = time.perf_counter()
-        
+        self.display()
         while True:
             
             if (time.perf_counter() - pollTime) > 10.0:
@@ -59,5 +70,6 @@ class Controller(object):
                     decrease = self.calcDecrease(r)
                     change = increase - decrease
                     r.changeTemp(change)
-                
+                self._house.calculateAverageTemp()
+                self.display()    
                 changeTime = time.perf_counter()
