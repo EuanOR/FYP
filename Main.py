@@ -1,5 +1,6 @@
 from Controller import Controller
 from Display import Display
+from Door import Door
 from Heater import Heater
 from House import House
 from Monitor import Monitor
@@ -13,20 +14,22 @@ class Main(object):
 
     livingRoomWindow = Window(3)
     livingRoomRad = Rad(3000)
-    livingRoom = Room("Living Room",16,20,8,12.0,livingRoomRad,livingRoomWindow)
+    livingRoomDoor = Door(1.5)
+    livingRoom = Room("Living Room",16,20,8,12.0,livingRoomRad,livingRoomDoor,livingRoomWindow)
 
     kitchenWindow  = Window(1)
     kitchenRad = Rad(2000)
-    kitchen = Room("Kitchen",10,16,8, 15.0, kitchenRad, kitchenWindow )  
+    kitchenDoor = Door(1.5)
+    kitchen = Room("Kitchen",10,16,8, 15.0, kitchenRad, kitchenDoor,kitchenWindow )  
 
     bedroom1Window = Window(3)
     bedroom1Rad = Rad(3000)
-    bedroom1 = Room("Bedroom 1",12,12,8,9.0,bedroom1Rad,bedroom1Window)
+    bedroom1Door = Door(1.5)
+    bedroom1 = Room("Bedroom 1",12,12,8,9.0,bedroom1Rad,bedroom1Door,bedroom1Window)
 
     houseRooms = [livingRoom,kitchen,bedroom1]
-    Home = House(True,houseRooms,"-37.8136","144.9631")
-
-    Boiler = Heater(Home)
+    Boiler = Heater(houseRooms)
+    Home = House(True,houseRooms,Boiler,"-37.8136","144.9631")
 
     Mon = Monitor(10,30,Boiler)
 
@@ -34,12 +37,14 @@ class Main(object):
     d = Display(Home,Boiler)
     def run(self):
 
-        controller = threading.Thread(target = self.c.run)
+        #controller = threading.Thread(target = self.c.run)
         #display = threading.Thread(target = self.d.run)
 
-        controller.start()
+        #controller.start()
         #Calls a class that create a tkinter object to display the house in a seperate window
         #display.start()
+
+        self.c.run()
 
 
 if __name__ == "__main__":
