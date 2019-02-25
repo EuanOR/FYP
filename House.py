@@ -19,6 +19,16 @@ class House(object):
 
         self._averageTemp = 0
         self.calculateAverageTemp()
+    
+    def __str__(self):
+
+        outstr = "|House|"
+        outstr += " "
+        outstr += ("Average Temperature:" + str(self._averageTemp))
+        outstr += " " 
+        outstr += ("Rooms:" + str(len(self._rooms)))
+
+        return outstr
 
     def insulate(self):
         
@@ -36,7 +46,6 @@ class House(object):
 
     def getRooms(self):
         
-        print("Rooms:" + str(len(self._rooms)))
         return self._rooms
 
     def setRooms(self, new_rooms):
@@ -113,6 +122,8 @@ def test():
     h.setLon(12.651)
     print(h.getLon())
     print(h.getAverageTemp())
+
+    print(h)
 
 if __name__ == "__main__":
     test()
