@@ -1,7 +1,6 @@
 from Window import Window
 from Door import Door
 from Rad import Rad
-#TODO Add wall thickness and door class
 
 class Room(object):
 
@@ -118,6 +117,14 @@ class Room(object):
 
         if isinstance(newRad, Rad):
             self._rad = newRad
+    
+    def getDoor(self):
+
+        return self._door
+    
+    def setDoor(self, newDoor):
+
+        self._door = newDoor
 
     def openDoor(self):
         
@@ -126,6 +133,14 @@ class Room(object):
     def closeDoor(self):
 
         self._door.closeDoor()
+    
+    def getWindow(self):
+
+        return self._window
+    
+    def setWindow(self,newWindow):
+
+        self._window = newWindow
 
     def openWindow(self):
 
