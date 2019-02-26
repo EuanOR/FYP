@@ -30,3 +30,7 @@ class Door(object):
     def closeDoor(self):
 
         self._open =  False
+    
+    def isOpen(self):
+
+        return self._open
