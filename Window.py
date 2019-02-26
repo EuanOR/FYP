@@ -31,3 +31,6 @@ class Window(object):
         
         self._open = False
     
+    def isOpen(self):
+
+        return self._open
