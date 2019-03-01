@@ -9,45 +9,31 @@ from Room import Room
 from Window import Window
 
 import threading
+import tkinter
 
-class Main(object):
+livingRoomWindow = Window(3)
+livingRoomRad = Rad(3000)
+livingRoomDoor = Door(1.5)
+livingRoom = Room("Living Room",16,20,8,12.0,livingRoomRad,livingRoomDoor,livingRoomWindow)
 
-    livingRoomWindow = Window(3)
-    livingRoomRad = Rad(3000)
-    livingRoomDoor = Door(1.5)
-    livingRoom = Room("Living Room",16,20,8,12.0,livingRoomRad,livingRoomDoor,livingRoomWindow)
+kitchenWindow  = Window(1)
+kitchenRad = Rad(2000)
+kitchenDoor = Door(1.5)
+kitchen = Room("Kitchen",10,16,8, 15.0, kitchenRad, kitchenDoor,kitchenWindow )  
 
-    kitchenWindow  = Window(1)
-    kitchenRad = Rad(2000)
-    kitchenDoor = Door(1.5)
-    kitchen = Room("Kitchen",10,16,8, 15.0, kitchenRad, kitchenDoor,kitchenWindow )  
+bedroom1Window = Window(3)
+bedroom1Rad = Rad(3000)
+bedroom1Door = Door(1.5)
+bedroom1 = Room("Bedroom 1",12,12,8,9.0,bedroom1Rad,bedroom1Door,bedroom1Window)
 
-    bedroom1Window = Window(3)
-    bedroom1Rad = Rad(3000)
-    bedroom1Door = Door(1.5)
-    bedroom1 = Room("Bedroom 1",12,12,8,9.0,bedroom1Rad,bedroom1Door,bedroom1Window)
+houseRooms = [livingRoom,kitchen,bedroom1]
+Boiler = Heater(houseRooms)
+Home = House(True,houseRooms,Boiler,"-37.8136","144.9631")
 
-    houseRooms = [livingRoom,kitchen,bedroom1]
-    Boiler = Heater(houseRooms)
-    Home = House(True,houseRooms,Boiler,"-37.8136","144.9631")
+Mon = Monitor(10,30,Boiler)
 
-    Mon = Monitor(10,30,Boiler)
-
-    c = Controller(Home,Mon)
-    d = Display(Home,Boiler)
-    def run(self):
-
-        #controller = threading.Thread(target = self.c.run)
-        #display = threading.Thread(target = self.d.run)
-
-        #controller.start()
-        #Calls a class that create a tkinter object to display the house in a seperate window
-        #display.start()
-
-        self.c.run()
+c = Controller(Home,Mon)
+d = Display(Home,Boiler)
 
 
-if __name__ == "__main__":
-
-    m = Main()
-    m.run()
+c.run()  
