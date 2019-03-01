@@ -2,6 +2,8 @@ from WeatherAPI import WeatherAPI
 from Heater import Heater
 from Rad import Rad
 
+import Firebase
+
 class Monitor(object):
 
     def __init__(self,low,high, heater):
@@ -11,14 +13,27 @@ class Monitor(object):
         self._heater = heater
 
         self.heatingActive = False
+    
+    def getLow(self):
+
+        return self._low
+    
+    def getHigh(self):
+
+        return self._high
+
 
     def monitor(self):
     
         curTemp = WeatherAPI().getTemperature()
 
-        if (curTemp <= self._low and not self.heatingActive):
+        if ((curTemp <= self._low or Firebase.getHeating()) and not self.heatingActive):
             
             self.activateHeating()
+        
+        elif (not Firebase.getHeating and not self.heatingActive):
+
+            self.deactivateHeating
         
     
     def activateHeating(self):
