@@ -1,5 +1,6 @@
 from Rad import Rad
 from Room import Room
+import Firebase
 class Heater(object):
 
     def __init__(self, rooms):
@@ -48,12 +49,14 @@ class Heater(object):
     def powerOn(self):
         
         self._active = True
+        Firebase.setHeating(self._active)
         for r in self._rads:
             r.activate()
 
     def powerOff(self):
         
         self._active = False
+        Firebase.setHeating(self._active)
         for r in self._rads:
             r.deactivate()
 
