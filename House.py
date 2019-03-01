@@ -64,6 +64,18 @@ class House(object):
         else:
             print("Invalid Operation: Must be of type list")
     
+    def getHeater(self):
+
+        return self._heater
+    
+    def setHeater(self, newHeater):
+
+        if isinstance(newHeater,Heater):
+            self._heater = newHeater
+        
+        else:
+            print("Must be of type heater.")
+    
     def addRoom(self, new_room):
         
         if (isinstance(new_room, Room)):
