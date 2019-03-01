@@ -36,7 +36,7 @@ class Controller(object):
         increase = 0.0
         rad = room.getRad()
         
-        if rad.isActive():
+        if rad.isActive() and (self._house._averageTemp < self._monitor.getHigh()):
             increase = rad.getBTU() / room.getArea()
         
         return increase
@@ -44,8 +44,14 @@ class Controller(object):
     def calcDecrease(self, room):
         
         decrease = 0.0 
-        if self._house.isInsulated():
+
+        if not self._house.isInsulated():
             decrease += -0.1
+        if room.getDoor().isOpen():
+            decrease += 0.1
+        if room.getWindow().isOpen():
+            decrease += 0.5
+
         return decrease
     
     def display(self):
@@ -69,7 +75,7 @@ class Controller(object):
                 r.changeTemp(change)
             self._house.calculateAverageTemp()
             self.display()
-            time.sleep(30) 
+            time.sleep(15) 
 
     def run(self):
         
