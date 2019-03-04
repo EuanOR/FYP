@@ -1,8 +1,8 @@
 class Rad(object):
 
     def __init__(self, BTU):
-        #British Thermal Units.
-        #BTU is the amount of heat required to raise the temperature of 1lb of water by a degree.
+        # British Thermal Units.
+        # BTU is the amount of heat required to raise the temperature of 1lb of water by a degree.
         self._BTU = BTU
         self._active = False
     
@@ -22,6 +22,6 @@ class Rad(object):
         
         self._active = False
 
-    def isActive(self):
+    def is_active(self):
 
         return self._active

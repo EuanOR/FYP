@@ -1,184 +1,201 @@
 from Window import Window
 from Door import Door
 from Rad import Rad
+from Light import Light
+
 
 class Room(object):
-
-    def __init__(self, name, length, width, height, temp, rad, door, window):
-        #Measurements are done in Feet.
+    def __init__(self, name, length, width, height, temp, rad, door, light, window):
+        # Measurements are done in Feet.
         self._name = name
         self._length = length
         self._width = width
         self._height = height
 
         self._sqrFt = self._calculateSqrFt(self._length, self._width)
-        self._area = self._calculateArea(self._length, self._width, self._height)
+        self._area = self._calculate_area(self._length, self._width, self._height)
 
         self._temp = temp
 
         if isinstance(rad, Rad):
             self._rad = rad
-        
+
         else:
             print("Rad must be of type Rad")
-        
+
         self._door = door
+        self._light = light
         self._window = window
-    
+
     def __str__(self):
 
         outstr = "|"
         outstr += self._name
         outstr += "| "
-        outstr += ("Temperature:" + str(self._temp))
+        outstr += ("Temperature:" + str(round(self._temp, 2)))
         outstr += " "
         outstr += "Rad:"
-        
-        if self._rad.isActive():
+
+        if self._rad.is_active():
             outstr += "On"
         else:
-            outstr += "Off" 
-        
+            outstr += "Off"
+
+        outstr += " "
+        outstr += "Light:"
+
+        if self._light.is_on():
+            outstr += "On"
+        else:
+            outstr += "Off"
+
         return outstr
-    
-    def getLength(self):
+
+    def get_length(self):
 
         return self._length
 
-    def setLength(self, new_length):
+    def set_length(self, length):
 
-        self._length = new_length
+        self._length = length
         self.recalculateSqrFt()
-        self.recalculateArea()
+        self.recalculate_area()
 
-    def getWidth(self):
+    def get_width(self):
 
         return self._width
-    
-    def setWidth(self, new_width):
 
-        self._width = new_width
+    def set_width(self, width):
+
+        self._width = width
         self.recalculateSqrFt()
-        self.recalculateArea()
-    
-    def getHeight(self):
+        self.recalculate_area()
+
+    def get_height(self):
 
         return self._height
-    
-    def setHeight(self, new_height):
 
-        self._height = new_height
+    def set_height(self, height):
+
+        self._height = height
         self.recalculateSqrFt()
-        self.recalculateArea()
-    
+        self.recalculate_area()
+
     def getSqrFt(self):
 
         return self._sqrFt
 
-    def _calculateSqrFt(self,l,w):
-        
-        sqrFt = (l*w)
+    def _calculateSqrFt(self, l, w):
+
+        sqrFt = (l * w)
         return sqrFt
-    
+
     def recalculateSqrFt(self):
 
-        self._sqrFt = self._calculateSqrFt(self._length,self._width)
-    
-    def getArea(self):
+        self._sqrFt = self._calculateSqrFt(self._length, self._width)
+
+    def get_area(self):
 
         return self._area
-    
-    def _calculateArea(self, l, w, h):
-        
-        area = (l*w*h)
+
+    def _calculate_area(self, l, w, h):
+
+        area = (l * w * h)
         return area
-    
-    def recalculateArea(self):
-        
-       self._area = self._calculateArea(self._length,self._width,self._height)
 
-    def getTemp(self):
-        
+    def recalculate_area(self):
+
+        self._area = self._calculate_area(self._length, self._width, self._height)
+
+    def get_temp(self):
+
         return self._temp
-    
-    def setTemp(self,newTemp):
 
-        self._temp = newTemp
-    
-    def changeTemp(self, change):
+    def set_temp(self, temp):
+
+        self._temp = temp
+
+    def change_temp(self, change):
 
         self._temp += change
-    
-    def getRad(self):
+
+    def get_rad(self):
 
         return self._rad
-    
-    def setRad(self, newRad):
 
-        if isinstance(newRad, Rad):
-            self._rad = newRad
-    
-    def getDoor(self):
+    def set_rad(self, rad):
+
+        if isinstance(rad, Rad):
+            self._rad = rad
+
+    def get_door(self):
 
         return self._door
-    
-    def setDoor(self, newDoor):
 
-        self._door = newDoor
+    def set_door(self, door):
 
-    def openDoor(self):
-        
-        self._door.openDoor()
-    
-    def closeDoor(self):
+        self._door = door
 
-        self._door.closeDoor()
-    
-    def getWindow(self):
+    def open_door(self):
+
+        self._door.open_door()
+
+    def close_door(self):
+
+        self._door.close_door()
+
+    def get_light(self):
+
+        return self._light
+
+    def set_light(self, light):
+
+        self._light = light
+
+    def get_window(self):
 
         return self._window
-    
-    def setWindow(self,newWindow):
 
-        self._window = newWindow
+    def set_window(self, window):
 
-    def openWindow(self):
+        self._window = window
 
-        self._window.openWindow()
-    
-    def closeWindow(self):
+    def open_window(self):
 
-        self._window.closeWindow()
-    
+        self._window.open_window()
+
+    def close_window(self):
+
+        self._window.close_window()
+
 
 def test():
-
     w = Window(2)
     d = Door(2.0)
+    l = Light(95)
     r = Rad(3000)
-    r = Room("Living room",12,15,10,10.5,r,d,w)
-    print(r.getLength())
-    print(r.getWidth())
-    print(r.getHeight())
+    r = Room("Living room", 12, 15, 10, 10.5, r, d, l, w)
+    print(r.get_length())
+    print(r.get_width())
+    print(r.get_height())
     print(r.getSqrFt())
-    print(r.getArea())
+    print(r.get_area())
 
-    r.setLength(9)
-    r.setWidth(15)
-    r.setHeight(12)
+    r.set_length(9)
+    r.set_width(15)
+    r.set_height(12)
 
-    print(r.getLength())
-    print(r.getWidth())
-    print(r.getHeight())
+    print(r.get_length())
+    print(r.get_width())
+    print(r.get_height())
     print(r.getSqrFt())
-    print(r.getArea())
+    print(r.get_area())
 
-    r.changeTemp(-1)
-    print(r.getTemp())
+    r.change_temp(-1)
+    print(r.get_temp())
 
     print(r)
-    
+
 
 if __name__ == "__main__":
-
     test()

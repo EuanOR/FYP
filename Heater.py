@@ -1,23 +1,25 @@
 from Rad import Rad
 from Room import Room
 import Firebase
+
+
 class Heater(object):
 
-    def __init__(self, rooms):
-        
-        self._rads = []
-        for r in rooms:
-            self._rads.append(r.getRad())
-        self._active = False
+    def __init__(self, rads):
 
-    
+        self._rads = rads
+        self._active = Firebase.get_heating_active()
+
+        if self._active:
+            self.power_on()
+
     def __str__(self):
 
         outstr = "Heater:"
 
         if self._active:
             outstr += "On"
-        
+
         else:
             outstr += "Off"
 
@@ -26,64 +28,64 @@ class Heater(object):
 
         return outstr
 
-    def addRad(self, newRad):
-        
-        self._rads.append(newRad)
+    def add_rad(self, rad):
 
-    def setHeat(self, newHeat):
-        
+        self._rads.append(rad)
+
+    def set_heat(self, newHeat):
+
         self._heat = newHeat
 
-    def getHeat(self):
-        
+    def get_heat(self):
+
         return self._heat
 
-    def setPowerCon(self, newPowerCon):
-        
-        self._powerCon = newPowerCon
+    def set_power_con(self, power_con):
 
-    def getPowerCon(self):
-        
-        return self._powerCon
+        self._power_con = power_con
 
-    def powerOn(self):
-        
+    def get_power_con(self):
+
+        return self._power_con
+
+    def power_on(self):
+
         self._active = True
-        Firebase.setHeating(self._active)
+        Firebase.set_heating_active(self._active)
         for r in self._rads:
             r.activate()
 
-    def powerOff(self):
-        
+    def power_off(self):
+
         self._active = False
-        Firebase.setHeating(self._active)
+        Firebase.set_heating_active(self._active)
         for r in self._rads:
             r.deactivate()
 
+
 def test():
-    
     H = Heater(15)
 
-    r1 = Rad(H.getHeat())
-    r2 = Rad(H.getHeat())
-    r3 = Rad(H.getHeat())
-    r4 = Rad(H.getHeat())
-    r5 = Rad(H.getHeat())
-    r6 = Rad(H.getHeat())
+    r1 = Rad(H.get_heat())
+    r2 = Rad(H.get_heat())
+    r3 = Rad(H.get_heat())
+    r4 = Rad(H.get_heat())
+    r5 = Rad(H.get_heat())
+    r6 = Rad(H.get_heat())
 
-    H.addRad(r1)
-    H.addRad(r2)
-    H.addRad(r3)
-    H.addRad(r4)
-    H.addRad(r5)
-    H.addRad(r6)
+    H.add_rad(r1)
+    H.add_rad(r2)
+    H.add_rad(r3)
+    H.add_rad(r4)
+    H.add_rad(r5)
+    H.add_rad(r6)
 
     print(H)
 
-    H.powerOn()
+    H.power_on()
     print("\n")
-    H.powerOff()
+    H.power_off()
+
 
 if __name__ == "__main__":
-   
     test()

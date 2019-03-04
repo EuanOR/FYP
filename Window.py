@@ -1,7 +1,7 @@
 class Window(object):
 
     def __init__(self, glazing):
-        if glazing >= 1 and glazing <= 3:
+        if 1 <= glazing <= 3:
             self._glazing = glazing
         elif glazing > 3:
             print("Windows cannot have more than triple glazing")
@@ -10,27 +10,26 @@ class Window(object):
         
         self._open = False
     
-    def getGlazing(self):
+    def get_glazing(self):
         
         return self._glazing
     
-    def setGlazing(self, new_glazing):
+    def set_glazing(self, glazing):
         
-        if new_glazing >= 1 and new_glazing <=3:
-            self._glazing = new_glazing
-        elif new_glazing > 3:
+        if 1 <= glazing <= 3:
+            self._glazing = glazing
+        elif glazing > 3:
             print("Windows cannot have more than triple glazing")
         else:
             print("Glazing cannot be less than one")
     
-    def openWindow(self):
+    def open_window(self):
         
         self._open = True
     
-    def closeWindow(self):
+    def close_window(self):
         
         self._open = False
     
-    def isOpen(self):
-
+    def is_open(self):
         return self._open
