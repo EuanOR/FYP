@@ -6,81 +6,81 @@ from WeatherAPI import WeatherAPI
 import time
 import threading
 
-class Controller(object):
 
+class Controller(object):
     api = WeatherAPI()
 
     def __init__(self, house, monitor):
-        
+
         self._house = house
         self._monitor = monitor
-    
-    def getHouse(self):
-        
+
+    def get_house(self):
+
         return self._house
-    
-    def setHouse(self,newHouse):
-        
-        self._house = newHouse
-    
-    def getMonitor(self):
-        
+
+    def set_house(self, house):
+
+        self._house = house
+
+    def get_monitor(self):
+
         return self._monitor
-    
-    def setMonitor(self, newMonitor):
 
-        self._monitor = newMonitor
-    
-    def calcIncrease(self, room):
-        
+    def set_monitor(self, monitor):
+
+        self._monitor = monitor
+
+    def calc_increase(self, room):
+
         increase = 0.0
-        rad = room.getRad()
-        
-        if rad.isActive() and (self._house._averageTemp < self._monitor.getHigh()):
-            increase = rad.getBTU() / room.getArea()
-        
-        return increase
-    
-    def calcDecrease(self, room):
-        
-        decrease = 0.0 
+        rad = room.get_rad()
 
-        if not self._house.isInsulated():
+        if rad.is_active() and (self._house.average_temp < self._monitor.get_high()):
+            increase = rad.getBTU() / room.get_area()
+
+        return increase
+
+    def calc_decrease(self, room):
+
+        decrease = 0.0
+
+        if not self._house.is_insulated():
             decrease += -0.1
-        if room.getDoor().isOpen():
+        if room.get_door().is_open():
             decrease += 0.1
-        if room.getWindow().isOpen():
+        if room.get_window().is_open():
             decrease += 0.5
 
         return decrease
-    
+
     def display(self):
 
         print(self._house)
-        for r in self._house.getRooms():
-            print(r)
         print(self._monitor._heater)
-    
+        for r in self._house.get_rooms():
+            print(r)
+
     def monitor(self):
         while True:
             self._monitor.monitor()
             time.sleep(10)
-    
-    def changeTemp(self):
+
+    def change_temp(self):
         while True:
-            for r in self._house.getRooms():
-                increase = self.calcIncrease(r)
-                decrease = self.calcDecrease(r)
+            for r in self._house.get_rooms():
+                increase = self.calc_increase(r)
+                decrease = self.calc_decrease(r)
                 change = increase - decrease
-                r.changeTemp(change)
-            self._house.calculateAverageTemp()
+                r.change_temp(change)
+            self._house.calculate_average_temp()
             self.display()
-            time.sleep(15) 
+            time.sleep(15)
 
     def run(self):
-        
-        monitor = threading.Thread(target = self.monitor)
-        change = threading.Thread(target = self.changeTemp)
+
+        monitor = threading.Thread(target=self.monitor)
+        change = threading.Thread(target=self.change_temp)
 
         monitor.start()
         change.start()
