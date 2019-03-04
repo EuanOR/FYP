@@ -12,15 +12,36 @@ firebase = firebase_admin.initialize_app(cred, {
 # As an admin, the app has access to read and write all data, regradless of Security Rules
 house = db.reference('House')
 
-def getHeating():
 
-    heating = house.child('Heating')
-    return heating.get()
+def get_heating_active():
 
-def setHeating(state):
+    active = house.child('Heating').child('Active')
+    return active.get()
 
-    heating = house.child('Heating')
-    if isinstance(state,bool):
-        heating.set(state)
+
+def set_heating_active(state):
+
+    active = house.child('Heating').child('Active')
+
+    if isinstance(state, bool):
+        active.set(state)
     else:
-        print("State must be a boolen value. Received" + str(state))
+        print("Heating state must be a boolean value. Received" + str(state))
+
+
+def get_lights_active():
+
+    active = house.child('Lights').child('Active')
+
+    return active.get()
+
+
+def set_lights_active(state):
+
+    active = house.child('Lights').child('Active')
+
+    if isinstance(state, bool):
+        active.set(state)
+    else:
+        print("Lights state must be a boolean value. Received" + str(state))
+
