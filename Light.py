@@ -4,25 +4,25 @@ class Light(object):
         self._brightness = brightness
         self._on = False
     
-    def getBrightness(self):
+    def get_brightness(self):
 
         return self._brightness
     
-    def setBrightness(self, brightness):
+    def set_brightness(self, brightness):
         
-        if (brightness > 0 and brightness <= 100):
+        if 0 < brightness <= 100:
             self._brightness = brightness
         else:
             print("Must be between 1-100")
     
-    def turnOn(self):
+    def turn_on(self):
 
         self._on = True
     
-    def turnOff(self):
+    def turn_off(self):
 
         self._on = False
     
-    def isOn(self):
+    def is_on(self):
 
         return self._on
