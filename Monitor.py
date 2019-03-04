@@ -4,68 +4,95 @@ from Rad import Rad
 
 import Firebase
 
+
 class Monitor(object):
 
-    def __init__(self,low,high, heater):
-        
+    def __init__(self, low, high, heater, light_controller):
+
         self._low = low
         self._high = high
         self._heater = heater
+        self._light_controller = light_controller
 
-        self.heatingActive = False
-    
-    def getLow(self):
+        self.heating_active = Firebase.get_heating_active()
+        self._lights_active = Firebase.get_lights_active()
+
+    def get_low(self):
 
         return self._low
-    
-    def getHigh(self):
+
+    def get_high(self):
 
         return self._high
 
-
     def monitor(self):
-    
-        curTemp = WeatherAPI().getTemperature()
 
-        if ((curTemp <= self._low or Firebase.getHeating()) and not self.heatingActive):
-            
-            self.activateHeating()
-        
-        elif (not Firebase.getHeating and not self.heatingActive):
+        cur_temp = WeatherAPI().get_temperature()
 
-            self.deactivateHeating
-        
-    
-    def activateHeating(self):
-        
-        self.heatingActive = True
-        self._heater.powerOn()
-    
-    def deactivateHeating(self):
-        
-        self.heatingActive = False
-        self._heater.powerOff()
+        # If the heating isnt on perform these checks
+        if not self.heating_active:
+            # If the current temperature is below the threshold or the heating has been remotely activated
+            if cur_temp <= self._low or Firebase.get_heating_active():
+                self.activate_heating()
+
+        # If the heating isnt on perform these checks
+        if self.heating_active:
+            # If the heating has been deactivated remotely
+            if not Firebase.get_heating_active():
+                self.deactivate_heating()
+
+        # If the lights arent on perform these checks
+        if not self._lights_active:
+            # Check has the lights been activated remotely
+            if Firebase.get_lights_active():
+                self.activate_lights()
+
+        # If the lights are on perform these checks
+        if self._lights_active:
+            # Check the lights have been deactivated remotely
+            if not Firebase.get_lights_active():
+                self.deactivate_lights()
+
+    def activate_heating(self):
+
+        self.heating_active = True
+        self._heater.power_on()
+
+    def deactivate_heating(self):
+
+        self.heating_active = False
+        self._heater.power_off()
+
+    def activate_lights(self):
+
+        self._lights_active = True
+        self._light_controller.power_on()
+
+    def deactivate_lights(self):
+
+        self._lights_active = False
+        self._light_controller.power_off()
 
 def test():
-
     H = Heater(20)
 
-    r1 = Rad(H.getHeat())
-    r2 = Rad(H.getHeat())
-    r3 = Rad(H.getHeat())
-    r4 = Rad(H.getHeat())
-    r5 = Rad(H.getHeat())
-    r6 = Rad(H.getHeat())
+    r1 = Rad(H.get_heat())
+    r2 = Rad(H.get_heat())
+    r3 = Rad(H.get_heat())
+    r4 = Rad(H.get_heat())
+    r5 = Rad(H.get_heat())
+    r6 = Rad(H.get_heat())
 
-    H.addRad(r1)
-    H.addRad(r2)
-    H.addRad(r3)
-    H.addRad(r4)
-    H.addRad(r5)
-    H.addRad(r6)
+    H.add_rad(r1)
+    H.add_rad(r2)
+    H.add_rad(r3)
+    H.add_rad(r4)
+    H.add_rad(r5)
+    H.add_rad(r6)
 
-    c = Monitor(10,20,H)
+    c = Monitor(10, 20, H)
     c.monitor()
+
 
 if __name__ == "__main__":
     test()
