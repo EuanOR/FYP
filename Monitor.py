@@ -27,12 +27,28 @@ class Monitor(object):
 
     def monitor(self):
 
+        self._check_heating()
+
+        self._check_lights()
+
+    def activate_heating(self):
+
+        self.heating_active = True
+        self._heater.power_on()
+
+    def deactivate_heating(self):
+
+        self.heating_active = False
+        self._heater.power_off()
+
+    def _check_heating(self):
         cur_temp = WeatherAPI().get_temperature()
 
         # If the heating isnt on perform these checks
         if not self.heating_active:
             # If the current temperature is below the threshold or the heating has been remotely activated
-            if cur_temp <= self._low or Firebase.get_heating_active():
+            if (cur_temp <= Firebase.get_heating_threshold() and Firebase.heating_automated()) \
+                    or Firebase.get_heating_active():
                 self.activate_heating()
 
         # If the heating isnt on perform these checks
@@ -40,6 +56,18 @@ class Monitor(object):
             # If the heating has been deactivated remotely
             if not Firebase.get_heating_active():
                 self.deactivate_heating()
+
+    def activate_lights(self):
+
+        self._lights_active = True
+        self._light_controller.power_on()
+
+    def deactivate_lights(self):
+
+        self._lights_active = False
+        self._light_controller.power_off()
+
+    def _check_lights(self):
 
         # If the lights arent on perform these checks
         if not self._lights_active:
@@ -53,25 +81,6 @@ class Monitor(object):
             if not Firebase.get_lights_active():
                 self.deactivate_lights()
 
-    def activate_heating(self):
-
-        self.heating_active = True
-        self._heater.power_on()
-
-    def deactivate_heating(self):
-
-        self.heating_active = False
-        self._heater.power_off()
-
-    def activate_lights(self):
-
-        self._lights_active = True
-        self._light_controller.power_on()
-
-    def deactivate_lights(self):
-
-        self._lights_active = False
-        self._light_controller.power_off()
 
 def test():
     H = Heater(20)
