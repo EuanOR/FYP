@@ -4,6 +4,8 @@ from Rad import Rad
 
 import Firebase
 
+import time
+
 
 class Monitor(object):
 
@@ -68,17 +70,25 @@ class Monitor(object):
         self._light_controller.power_off()
 
     def _check_lights(self):
+        # TODO Get rid of below variables, directly use Firebase and Time
+        start_time = str(Firebase.get_lights_start())
+        end_time = str(Firebase.get_lights_end())
+        curtime = str(time.strftime("%H:%M"))
 
         # If the lights arent on perform these checks
         if not self._lights_active:
+            # If automations enabled and the current time's in between the threshold
             # Check has the lights been activated remotely
-            if Firebase.get_lights_active():
+            if ((start_time < curtime < end_time)
+                    and Firebase.lights_automated()) or Firebase.get_lights_active():
                 self.activate_lights()
 
         # If the lights are on perform these checks
         if self._lights_active:
             # Check the lights have been deactivated remotely
-            if not Firebase.get_lights_active():
+            # TODO figure out the logic
+            if ((curtime < start_time) or (curtime > end_time) and Firebase.lights_automated()) \
+                    or not Firebase.get_lights_active():
                 self.deactivate_lights()
 
 
