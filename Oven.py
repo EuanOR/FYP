@@ -22,7 +22,7 @@ class Oven(object):
 
     def activate(self, temp):
 
-        if temp <= self._MAX_TEMP:
+        if 0 < temp <= self._MAX_TEMP:
             self._active = True
             self._cur_temp = temp
 
