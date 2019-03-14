@@ -9,14 +9,15 @@ import time
 
 class Monitor(object):
 
-    def __init__(self, low, high, heater, light_controller):
+    def __init__(self, low, high, heater, light_controller, kitchen_controller):
 
         self._low = low
         self._high = high
         self._heater = heater
         self._light_controller = light_controller
+        self._kitchen_controller = kitchen_controller
 
-        self.heating_active = Firebase.get_heating_active()
+        self._heating_active = Firebase.get_heating_active()
         self._lights_active = Firebase.get_lights_active()
 
     def get_low(self):
@@ -33,9 +34,11 @@ class Monitor(object):
 
         self._check_lights()
 
+        self._check_kitchen()
+
     def activate_heating(self):
 
-        self.heating_active = True
+        self._heating_active = True
         self._heater.power_on()
 
     def deactivate_heating(self):
@@ -47,14 +50,14 @@ class Monitor(object):
         cur_temp = WeatherAPI().get_temperature()
 
         # If the heating isnt on perform these checks
-        if not self.heating_active:
+        if not self._heating_active:
             # If the current temperature is below the threshold or the heating has been remotely activated
             if (cur_temp <= Firebase.get_heating_threshold() and Firebase.heating_automated()) \
                     or Firebase.get_heating_active():
                 self.activate_heating()
 
         # If the heating isnt on perform these checks
-        if self.heating_active:
+        if self._heating_active:
             # If the heating has been deactivated remotely
             if not Firebase.get_heating_active():
                 self.deactivate_heating()
@@ -84,13 +87,33 @@ class Monitor(object):
                 self.activate_lights()
 
         # If the lights are on perform these checks
-        if self._lights_active:
+        elif self._lights_active:
             # Check the lights have been deactivated remotely
             # TODO figure out the logic
             if ((curtime < start_time) or (curtime > end_time) and Firebase.lights_automated()) \
                     or not Firebase.get_lights_active():
                 self.deactivate_lights()
 
+    def _check_kitchen(self):
+        if not self._kitchen_controller.kettle_active:
+            if Firebase.get_kettle_active():
+                self._kitchen_controller.activate_kettle()
+
+        if self._kitchen_controller.oven_active:
+            if not Firebase.get_oven_active():
+                self._kitchen_controller.deactivate_oven()
+
+        elif not self._kitchen_controller.oven_active:
+            if Firebase.get_oven_active():
+                self._kitchen_controller.activate_oven()
+
+        if self._kitchen_controller.toaster_active:
+            if not Firebase.get_toaster_active():
+                self._kitchen_controller.deactivate_toaster()
+
+        elif not self._kitchen_controller.toaster_active:
+            if Firebase.get_toaster_active():
+                self._kitchen_controller.activate_toaster()
 
 def test():
     H = Heater(20)
