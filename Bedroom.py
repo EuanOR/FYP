@@ -6,6 +6,10 @@ class Bedroom(Room):
         super().__init__(name, length, width, height, temp, rad, door, light, window)
         self._electric_blanket = electric_blanket
 
+    def __str__(self):
+        outstr = " " + str(self._electric_blanket)
+        return super().__str__() + outstr
+
     def get_electric_blanket(self):
 
         return self._electric_blanket
