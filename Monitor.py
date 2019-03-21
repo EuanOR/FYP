@@ -9,13 +9,14 @@ import time
 
 class Monitor(object):
 
-    def __init__(self, low, high, heater, light_controller, kitchen_controller):
+    def __init__(self, low, high, heater, light_controller, kitchen_controller, bedroom_controller):
 
         self._low = low
         self._high = high
         self._heater = heater
         self._light_controller = light_controller
         self._kitchen_controller = kitchen_controller
+        self._bedroom_controller = bedroom_controller
 
         self._heating_active = Firebase.get_heating_active()
         self._lights_active = Firebase.get_lights_active()
@@ -35,6 +36,8 @@ class Monitor(object):
         self._check_lights()
 
         self._check_kitchen()
+
+        self._check_bedroom()
 
     def activate_heating(self):
 
@@ -114,6 +117,14 @@ class Monitor(object):
         elif not self._kitchen_controller.toaster_active:
             if Firebase.get_toaster_active():
                 self._kitchen_controller.activate_toaster()
+
+    def _check_bedroom(self):
+        if self._bedroom_controller.eb_active:
+            if not Firebase.get_eb_active():
+                self._bedroom_controller.deactivate_eb()
+        elif not self._bedroom_controller.eb_active:
+            if Firebase.get_eb_active():
+                self._bedroom_controller.activate_eb()
 
 def test():
     H = Heater(20)
