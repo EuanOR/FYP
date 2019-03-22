@@ -193,11 +193,47 @@ def get_eb_level():
 
     return level
 
+
 def set_eb_max(new_max):
-    active = house.child('rooms').child('bedroom') \
+    eb_max = house.child('rooms').child('bedroom') \
         .child('electric_blanket').child('max_level')
 
     if isinstance(new_max, int):
-        active.set(new_max)
+        eb_max.set(new_max)
     else:
         print("Electric blanket max must be an integer value")
+
+
+def get_dryer_active():
+
+    active = house.child('rooms/utility_room/dryer/active').get()
+
+    return active
+
+
+def set_dryer_active(state):
+
+    active = house.child('rooms/utility_room/dryer/active')
+
+    if isinstance(state, bool):
+        active.set(state)
+
+    else:
+        print("Dryer state must be a boolean value")
+
+
+def set_dryer_max(new_max):
+    dryer_max = house.child('rooms/utility_room/dryer/max_temp')
+
+    if isinstance(new_max, int):
+        dryer_max.set(new_max)
+
+    else:
+        print("Dryer max must be an int value")
+
+
+def get_dryer_temperature():
+
+    temp = house.child('rooms/utility_room/dryer/temperature')
+
+    return temp
