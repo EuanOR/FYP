@@ -31,13 +31,13 @@ def set_heating_active(state):
 
 def get_heating_threshold():
 
-    threshold = house.child('heating').child('threshold')
-    return threshold.get()
+    threshold = house.child('heating').child('threshold').get()
+    return int(threshold)
 
 
 def heating_automated():
 
-    automated = house.child('heating').child('automated')
+    automated = house.child('heating').child('automated').get()
     return automated
 
 
@@ -234,6 +234,6 @@ def set_dryer_max(new_max):
 
 def get_dryer_temperature():
 
-    temp = house.child('rooms/utility_room/dryer/temperature')
+    temp = house.child('rooms/utility_room/dryer/temperature').get()
 
-    return temp
+    return int(temp)

@@ -40,6 +40,8 @@ class Monitor(object):
 
         self._check_bedroom()
 
+        self._check_utility_room()
+
     def activate_heating(self):
 
         self._heating_active = True
@@ -47,20 +49,22 @@ class Monitor(object):
 
     def deactivate_heating(self):
 
-        self.heating_active = False
+        self._heating_active = False
         self._heater.power_off()
 
     def _check_heating(self):
-        cur_temp = WeatherAPI().get_temperature()
+        cur_temp = int(WeatherAPI().get_temperature())
 
         # If the heating isnt on perform these checks
         if not self._heating_active:
+            print(cur_temp)
+            print(Firebase.get_heating_threshold())
             # If the current temperature is below the threshold or the heating has been remotely activated
             if (cur_temp <= Firebase.get_heating_threshold() and Firebase.heating_automated()) \
-                    or Firebase.get_heating_active():
+                    or Firebase.get_heating_active() :
                 self.activate_heating()
 
-        # If the heating isnt on perform these checks
+        # If the heating is on perform these checks
         if self._heating_active:
             # If the heating has been deactivated remotely
             if not Firebase.get_heating_active():
@@ -86,7 +90,7 @@ class Monitor(object):
         if not self._lights_active:
             # If automations enabled and the current time's in between the threshold
             # Check has the lights been activated remotely
-            if ((start_time < curtime < end_time)
+            if ((start_time <= curtime < end_time)
                     and Firebase.lights_automated()) or Firebase.get_lights_active():
                 self.activate_lights()
 
@@ -94,7 +98,7 @@ class Monitor(object):
         elif self._lights_active:
             # Check the lights have been deactivated remotely
             # TODO figure out the logic
-            if ((curtime < start_time) or (curtime > end_time) and Firebase.lights_automated()) \
+            if ((curtime < start_time) or (curtime >= end_time) and Firebase.lights_automated()) \
                     or not Firebase.get_lights_active():
                 self.deactivate_lights()
 
@@ -151,10 +155,6 @@ def test():
     H.add_rad(r4)
     H.add_rad(r5)
     H.add_rad(r6)
-
-    c = Monitor(10, 20, H)
-    c.monitor()
-
 
 if __name__ == "__main__":
     test()
