@@ -19,9 +19,6 @@ class Monitor(object):
         self._bedroom_controller = bedroom_controller
         self._utility_room_controller = utility_room_controller
 
-        self._heating_active = Firebase.get_heating_active()
-        self._lights_active = Firebase.get_lights_active()
-
     def get_low(self):
 
         return self._low
@@ -42,43 +39,21 @@ class Monitor(object):
 
         self._check_utility_room()
 
-    def activate_heating(self):
-
-        self._heating_active = True
-        self._heater.power_on()
-
-    def deactivate_heating(self):
-
-        self._heating_active = False
-        self._heater.power_off()
-
     def _check_heating(self):
         cur_temp = int(WeatherAPI().get_temperature())
 
         # If the heating isnt on perform these checks
-        if not self._heating_active:
-            print(cur_temp)
-            print(Firebase.get_heating_threshold())
+        if not self._heater.active:
             # If the current temperature is below the threshold or the heating has been remotely activated
             if (cur_temp <= Firebase.get_heating_threshold() and Firebase.heating_automated()) \
-                    or Firebase.get_heating_active() :
-                self.activate_heating()
+                    or Firebase.get_heating_active():
+                self._heater.power_on()
 
         # If the heating is on perform these checks
-        if self._heating_active:
+        if self._heater.active:
             # If the heating has been deactivated remotely
             if not Firebase.get_heating_active():
-                self.deactivate_heating()
-
-    def activate_lights(self):
-
-        self._lights_active = True
-        self._light_controller.power_on()
-
-    def deactivate_lights(self):
-
-        self._lights_active = False
-        self._light_controller.power_off()
+                self._heater.power_off ()
 
     def _check_lights(self):
         # TODO Get rid of below variables, directly use Firebase and Time
@@ -87,20 +62,20 @@ class Monitor(object):
         curtime = str(time.strftime("%H:%M"))
 
         # If the lights arent on perform these checks
-        if not self._lights_active:
+        if not self._light_controller.active:
             # If automations enabled and the current time's in between the threshold
             # Check has the lights been activated remotely
             if ((start_time <= curtime < end_time)
                     and Firebase.lights_automated()) or Firebase.get_lights_active():
-                self.activate_lights()
+                self._light_controller.power_on()
 
         # If the lights are on perform these checks
-        elif self._lights_active:
+        elif self._light_controller.active:
             # Check the lights have been deactivated remotely
             # TODO figure out the logic
             if ((curtime < start_time) or (curtime >= end_time) and Firebase.lights_automated()) \
                     or not Firebase.get_lights_active():
-                self.deactivate_lights()
+                self._light_controller.power_off()
 
     def _check_kitchen(self):
         if not self._kitchen_controller.kettle_active:
