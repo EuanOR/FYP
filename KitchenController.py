@@ -1,7 +1,3 @@
-from Kettle import Kettle 
-from Oven import Oven
-from Toaster import Toaster
-
 import Firebase
 
 
@@ -19,11 +15,13 @@ class KitchenController(object):
 
 		self._oven = self._kitchen.get_oven()
 		self.oven_active = Firebase.get_oven_active()
+		Firebase.set_oven_max(self._oven.get_max_temp())
 		if self.oven_active:
 			self._oven.activate(int(Firebase.get_oven_temp()))
 
 		self._toaster = self._kitchen.get_toaster()
 		self.toaster_active = Firebase.get_toaster_active()
+		Firebase.set_toaster_max(self._toaster.get_max_level())
 		if self.toaster_active:
 			self._toaster.toast(int(Firebase.get_toaster_level()))
 
