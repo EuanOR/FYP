@@ -1,14 +1,23 @@
-from House import House
-from Room import Room
-from Rad import Rad
 from WeatherAPI import WeatherAPI
 
 import time
 import threading
 
+NOT_INSULATED = 2
+OPEN_DOOR = 0.1
+OPEN_WINDOW = 0.5
+
+FREEZING_DECREASE = 3.0
+COLD_DECREASE = 2.0
+MODERATE_DECREASE = 1.0
+
+
+
+api = WeatherAPI()
+
 
 class Controller(object):
-    api = WeatherAPI()
+
 
     def __init__(self, house, monitor):
 
@@ -45,26 +54,43 @@ class Controller(object):
 
         decrease = 0.0
 
-        if not self._house.is_insulated():
-            decrease += -0.1
         if room.get_door().is_open():
-            decrease += 0.1
+            decrease += OPEN_DOOR
+
         if room.get_window().is_open():
-            decrease += 0.5
+            if api.get_temperature() < 0:
+                decrease += FREEZING_DECREASE
+
+            elif api.get_temperature() < 10:
+                decrease += COLD_DECREASE
+
+            elif api.get_temperature() < 20:
+                decrease +=  MODERATE_DECREASE
+        else:
+            if not self._house.is_insulated():
+                if api.get_temperature() < 0:
+                    decrease += (FREEZING_DECREASE/NOT_INSULATED)
+
+                elif api.get_temperature() < 10:
+                    decrease += (COLD_DECREASE/NOT_INSULATED)
+
+                elif api.get_temperature() < 20:
+                    decrease += (MODERATE_DECREASE/NOT_INSULATED)
 
         return decrease
 
     def display(self):
 
         print(self._house)
-        print(self._monitor._heater)
+        print("")
         for r in self._house.get_rooms():
             print(r)
+        print("\n")
 
     def monitor(self):
         while True:
             self._monitor.monitor()
-            time.sleep(10)
+            time.sleep(5)
 
     def change_temp(self):
         while True:
@@ -75,7 +101,7 @@ class Controller(object):
                 r.change_temp(change)
             self._house.calculate_average_temp()
             self.display()
-            time.sleep(15)
+            time.sleep(5)
 
     def run(self):
 
