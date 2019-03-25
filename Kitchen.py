@@ -2,14 +2,19 @@ from Room import Room
 
 
 class Kitchen(Room):
-    def __init__(self, name, length, width, height, temp, rad, door, light, window, kettle, toaster, oven):
+    def __init__(self, name, length, width, height, temp, rad, door, light, window, kettle, oven, toaster):
         super().__init__(name, length, width, height, temp, rad, door, light, window)
 
         self._kettle = kettle
-        self._toaster = toaster
         self._oven = oven
-
-    # TODO Create getters and setters. STR Method.
+        self._toaster = toaster
+        
+    def __str__(self):
+        outstr = " "
+        outstr += str(self._kettle) + " "
+        outstr += str(self._oven) + " "
+        outstr += str(self._toaster) + " "
+        return super().__str__() + outstr 
 
     def get_kettle(self):
 
@@ -31,6 +36,6 @@ class Kitchen(Room):
 
         return self._oven
 
-    def set_over(self, oven):
+    def set_oven(self, oven):
 
         self._oven = oven
